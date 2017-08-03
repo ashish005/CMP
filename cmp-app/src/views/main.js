@@ -21,10 +21,10 @@ class MainView extends Component{
     }
     loadAppConfigsFromServer() {
         const _self = this;
+        _self.setState({ createViewDisplay: false });
         //TODO : Make a service call to get data
         setTimeout(function(){
             _self.setState({
-                createViewDisplay: false,
                 data: [
                 { data:{
                     "Array": [1, 2, 3],
@@ -124,11 +124,7 @@ class CreateConfigView extends Component{
         console.log(json);
         console.log(this.refs.name.value);
         console.log(this.refs.namespace.value);
-        const _self = this;
-        //TODO : Make a service call to get data
-        setTimeout(function(){
-            _self.props.fetch();
-        },1000);
+        this.props.fetch();
     }
     handleClose(){
         this.props.cb(false, null);
@@ -213,7 +209,6 @@ class ConfigInfo extends Component{
     handleDelete() {
         const _self = this;
         _self.setState({display: false});
-
         this.props.handleItemDelete(this.props.index);
     }
     handleEdit() {
