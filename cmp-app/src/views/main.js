@@ -15,12 +15,15 @@ class MainView extends Component{
             item:null
         };
         this.handleCreate = this.handleCreate.bind(this);
+        this.loadAppConfigsFromServer = this.loadAppConfigsFromServer.bind(this);
     }
     loadAppConfigsFromServer() {
         const _self = this;
         //TODO : Make a service call to get data
         setTimeout(function(){
-            _self.setState({data: [
+            _self.setState({
+                createViewDisplay: false,
+                data: [
                 { data:{
                     "Array": [1, 2, 3],
                     "Boolean": true,
@@ -69,7 +72,7 @@ class MainView extends Component{
     render() {
         return (
             <div>
-                { (this.state.createViewDisplay) && <CreateConfigView item={this.state.item} cb={this.handleCreate}></CreateConfigView>}
+                { (this.state.createViewDisplay) && <CreateConfigView item={this.state.item} cb={this.handleCreate} fetch={this.loadAppConfigsFromServer}></CreateConfigView>}
                 { (!this.state.createViewDisplay) && <ConfigTable data={this.state.data} cb={this.handleCreate} /> }
             </div>
         );
@@ -114,9 +117,14 @@ class CreateConfigView extends Component{
         console.log(json);
         console.log(this.refs.name.value);
         console.log(this.refs.namespace.value);
+        const _self = this;
+        //TODO : Make a service call to get data
+        setTimeout(function(){
+            _self.props.fetch();
+        },1000);
     }
     handleClose(){
-        this.props.cb(false);
+        this.props.cb(false, null);
     }
     render() {
         const _item = this.props.item || {};
