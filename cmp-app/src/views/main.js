@@ -15,6 +15,8 @@ class MainView extends Component{
             item:null
         };
         this.handleCreate = this.handleCreate.bind(this);
+        this.handleItemDelete = this.handleItemDelete.bind(this);
+
         this.loadAppConfigsFromServer = this.loadAppConfigsFromServer.bind(this);
     }
     loadAppConfigsFromServer() {
@@ -69,11 +71,16 @@ class MainView extends Component{
             item:data
         });
     }
+    handleItemDelete=(index)=>{
+        this.setState({
+            item:this.state.data.splice(index, 1)
+        });
+    }
     render() {
         return (
             <div>
                 { (this.state.createViewDisplay) && <CreateConfigView item={this.state.item} cb={this.handleCreate} fetch={this.loadAppConfigsFromServer}></CreateConfigView>}
-                { (!this.state.createViewDisplay) && <ConfigTable data={this.state.data} cb={this.handleCreate} /> }
+                { (!this.state.createViewDisplay) && <ConfigTable data={this.state.data} cb={this.handleCreate} handleDelete={this.handleItemDelete} /> }
             </div>
         );
     }
@@ -175,7 +182,7 @@ class ConfigTable extends Component{
         this.props.cb(true, data);
     }
     renderItem(itemRec, i) {
-        return (<ConfigInfo key={i} item={itemRec} handleEditItem={this.handleItemEdit} />);
+        return (<ConfigInfo key={i} index={i} item={itemRec} handleEditItem={this.handleItemEdit}  handleItemDelete={this.props.handleDelete} />);
     }
     render() {
         const items = this.props.data;
@@ -200,24 +207,22 @@ class ConfigTable extends Component{
 class ConfigInfo extends Component{
     constructor(props){
         super(props);
-        this.state = { display: true };
+        this.state = { };
         this.handleEdit = this.handleEdit.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
     }
     handleDelete() {
         const _self = this;
-        //TODO: Make a service call
-        setTimeout(function(){
-            _self.setState({display: false});
-        },1000);
+        _self.setState({display: false});
+
+        this.props.handleItemDelete(this.props.index);
     }
     handleEdit() {
         this.props.handleEditItem(false, this.props.item);
     }
     render() {
         const _item = this.props.item;
-        if (this.state.display==false) return null;
-        else return (
+         return (
             <tr>
                 <td>{_item.name}</td>
                 <td>{_item.age}</td>
