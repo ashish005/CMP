@@ -194,8 +194,7 @@ class ConfigTable extends Component{
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Age</th>
-                        <th>Years</th>
+                        <th>Namespace</th>
                     </tr>
                     </thead>
                     <tbody>{rows}</tbody>
@@ -225,8 +224,7 @@ class ConfigInfo extends Component{
          return (
             <tr>
                 <td>{_item.name}</td>
-                <td>{_item.age}</td>
-                <td>{_item.years}</td>
+                <td>{_item.namespace}</td>
                 <td>
                     <button className="btn btn-info" onClick={this.handleEdit}>Edit</button>
                     <button className="btn btn-info" onClick={this.handleDelete}>Delete</button>
